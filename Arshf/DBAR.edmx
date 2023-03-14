@@ -1,0 +1,228 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="DBARModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="TB_ArchiveCategory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDUser" Type="int" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserDep" Type="nvarchar" MaxLength="50" />
+          <Property Name="ArchiveTitel" Type="nvarchar" MaxLength="50" />
+          <Property Name="ArchiveDes" Type="nvarchar(max)" />
+          <Property Name="AddDate" Type="datetime" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="TB_Dep">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DepName" Type="nvarchar" MaxLength="50" />
+          <Property Name="DepDetails" Type="nvarchar" MaxLength="50" />
+          <Property Name="AddDate" Type="datetime" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <EntityType Name="TB_USERS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDDep" Type="int" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" />
+          <Property Name="DepName" Type="nvarchar" MaxLength="50" />
+          <Property Name="UserRole" Type="nvarchar" MaxLength="50" />
+          <Property Name="AddDate" Type="datetime" StoreGeneratedPattern="Computed" />
+        </EntityType>
+        <Association Name="FK_TB_ArchiveCategory_TB_USERS">
+          <End Role="TB_USERS" Type="Self.TB_USERS" Multiplicity="0..1" />
+          <End Role="TB_ArchiveCategory" Type="Self.TB_ArchiveCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_USERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TB_ArchiveCategory">
+              <PropertyRef Name="IDUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TB_USERS_TB_Dep">
+          <End Role="TB_Dep" Type="Self.TB_Dep" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TB_USERS" Type="Self.TB_USERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Dep">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TB_USERS">
+              <PropertyRef Name="IDDep" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="DBARModelStoreContainer">
+          <EntitySet Name="TB_ArchiveCategory" EntityType="Self.TB_ArchiveCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_Dep" EntityType="Self.TB_Dep" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TB_USERS" EntityType="Self.TB_USERS" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_TB_ArchiveCategory_TB_USERS" Association="Self.FK_TB_ArchiveCategory_TB_USERS">
+            <End Role="TB_USERS" EntitySet="TB_USERS" />
+            <End Role="TB_ArchiveCategory" EntitySet="TB_ArchiveCategory" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TB_USERS_TB_Dep" Association="Self.FK_TB_USERS_TB_Dep">
+            <End Role="TB_Dep" EntitySet="TB_Dep" />
+            <End Role="TB_USERS" EntitySet="TB_USERS" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="DBARModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="TB_Dep">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DepName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DepDetails" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AddDate" Type="DateTime" Precision="3" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="TB_USERS" Relationship="DBARModel.FK_TB_USERS_TB_Dep" FromRole="TB_Dep" ToRole="TB_USERS" />
+        </EntityType>
+        <EntityContainer Name="DBAREntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="TB_Dep" EntityType="Self.TB_Dep" />
+          <EntitySet Name="TB_USERS" EntityType="DBARModel.TB_USERS" />
+          <AssociationSet Name="FK_TB_USERS_TB_Dep" Association="DBARModel.FK_TB_USERS_TB_Dep">
+            <End Role="TB_Dep" EntitySet="TB_Dep" />
+            <End Role="TB_USERS" EntitySet="TB_USERS" />
+          </AssociationSet>
+          <EntitySet Name="TB_ArchiveCategory" EntityType="DBARModel.TB_ArchiveCategory" />
+          <AssociationSet Name="FK_TB_ArchiveCategory_TB_USERS" Association="DBARModel.FK_TB_ArchiveCategory_TB_USERS">
+            <End Role="TB_USERS" EntitySet="TB_USERS" />
+            <End Role="TB_ArchiveCategory" EntitySet="TB_ArchiveCategory" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="TB_USERS">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDDep" Type="Int32" />
+          <Property Name="FullName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DepName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserRole" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AddDate" Type="DateTime" Precision="3" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="TB_Dep" Relationship="DBARModel.FK_TB_USERS_TB_Dep" FromRole="TB_USERS" ToRole="TB_Dep" />
+          <NavigationProperty Name="TB_ArchiveCategory" Relationship="DBARModel.FK_TB_ArchiveCategory_TB_USERS" FromRole="TB_USERS" ToRole="TB_ArchiveCategory" />
+        </EntityType>
+        <Association Name="FK_TB_USERS_TB_Dep">
+          <End Type="DBARModel.TB_Dep" Role="TB_Dep" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="DBARModel.TB_USERS" Role="TB_USERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_Dep">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TB_USERS">
+              <PropertyRef Name="IDDep" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="TB_ArchiveCategory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDUser" Type="Int32" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UserDep" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ArchiveTitel" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ArchiveDes" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AddDate" Type="DateTime" Precision="3" annotation:StoreGeneratedPattern="Computed" />
+          <NavigationProperty Name="TB_USERS" Relationship="DBARModel.FK_TB_ArchiveCategory_TB_USERS" FromRole="TB_ArchiveCategory" ToRole="TB_USERS" />
+        </EntityType>
+        <Association Name="FK_TB_ArchiveCategory_TB_USERS">
+          <End Type="DBARModel.TB_USERS" Role="TB_USERS" Multiplicity="0..1" />
+          <End Type="DBARModel.TB_ArchiveCategory" Role="TB_ArchiveCategory" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TB_USERS">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TB_ArchiveCategory">
+              <PropertyRef Name="IDUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="DBARModelStoreContainer" CdmEntityContainer="DBAREntities">
+          <EntitySetMapping Name="TB_Dep">
+            <EntityTypeMapping TypeName="DBARModel.TB_Dep">
+              <MappingFragment StoreEntitySet="TB_Dep">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DepName" ColumnName="DepName" />
+                <ScalarProperty Name="DepDetails" ColumnName="DepDetails" />
+                <ScalarProperty Name="AddDate" ColumnName="AddDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_USERS">
+            <EntityTypeMapping TypeName="DBARModel.TB_USERS">
+              <MappingFragment StoreEntitySet="TB_USERS">
+                <ScalarProperty Name="AddDate" ColumnName="AddDate" />
+                <ScalarProperty Name="UserRole" ColumnName="UserRole" />
+                <ScalarProperty Name="DepName" ColumnName="DepName" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="IDDep" ColumnName="IDDep" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TB_ArchiveCategory">
+            <EntityTypeMapping TypeName="DBARModel.TB_ArchiveCategory">
+              <MappingFragment StoreEntitySet="TB_ArchiveCategory">
+                <ScalarProperty Name="AddDate" ColumnName="AddDate" />
+                <ScalarProperty Name="ArchiveDes" ColumnName="ArchiveDes" />
+                <ScalarProperty Name="ArchiveTitel" ColumnName="ArchiveTitel" />
+                <ScalarProperty Name="UserDep" ColumnName="UserDep" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="IDUser" ColumnName="IDUser" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
